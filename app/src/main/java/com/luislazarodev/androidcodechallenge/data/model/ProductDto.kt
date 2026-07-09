@@ -30,7 +30,7 @@ data class ProductDto(
             availabilityStatus = availabilityStatus ?: "Unknown",
             thumbnail = thumbnail.orEmpty(),
             images = images ?: emptyList(),
-            score = 0.0 // TODO: Calculate score
+            score = Product.calculateScore(parsedRating, parsedStock, parsedPrice)
         )
     }
 }
