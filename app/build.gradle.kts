@@ -1,20 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.luislazarodev.androidcodechallenge"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.luislazarodev.androidcodechallenge"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -26,6 +23,10 @@ android {
             optimization {
                 enable = false
             }
+            buildConfigField("String", "BASE_URL", "\"https://dummyjson.com/\"")
+        }
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://dummyjson.com/\"")
         }
     }
     compileOptions {
@@ -34,6 +35,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -41,11 +43,32 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Retrofit & OkHttp
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    "ksp"(libs.room.compiler)
+
+    // Coil
+    implementation(libs.coil.compose)
+
+    // Navigation & Lifecycle ViewModel
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
