@@ -6,9 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.luislazarodev.androidcodechallenge.ui.screens.detail.ProductDetailScreen
+import com.luislazarodev.androidcodechallenge.ui.screens.detail.ProductDetailViewModel
 import com.luislazarodev.androidcodechallenge.ui.screens.list.ProductListContract
 import com.luislazarodev.androidcodechallenge.ui.screens.list.ProductListScreen
 import com.luislazarodev.androidcodechallenge.ui.screens.list.ProductListViewModel
@@ -48,7 +52,28 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                    // TODO: Detail nav
+
+                    composable(
+                        route = "detail/{productId}",
+                        arguments = listOf(
+                            navArgument("productId") { type = NavType.IntType }
+                        )
+                    ) { backStackEntry ->
+                        val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+                        val detailViewModel: ProductDetailViewModel = viewModel(
+                            factory = ProductDetailViewModel.Factory(
+                                repository = appContainer.productRepository
+                            )
+                        )
+
+                        ProductDetailScreen(
+                            productId = productId,
+                            viewModel = detailViewModel,
+                            onBackClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
                 }
             }
         }
